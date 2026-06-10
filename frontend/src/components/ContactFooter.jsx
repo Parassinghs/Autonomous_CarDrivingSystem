@@ -33,8 +33,8 @@ export default function ContactFooter() {
     "w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3.5 text-white placeholder:text-[#6b7280] focus:outline-none focus:border-[#00E5FF] focus:ring-1 focus:ring-[#00E5FF] transition-all";
 
   return (
-    <footer id="contact" data-testid="contact-section" className="relative pt-24 lg:pt-32">
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+    <footer id="contact" data-testid="contact-section" className="relative pt-20 lg:pt-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           {/* Left: title + identity */}
           <div className="lg:col-span-5">

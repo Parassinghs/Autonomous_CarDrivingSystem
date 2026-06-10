@@ -26,9 +26,9 @@ export default function TrainingLogs() {
     <section
       id="archive"
       data-testid="archive-section"
-      className="relative py-24 lg:py-32"
+      className="relative py-20 lg:py-32"
     >
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-12">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
           <div>
             <div className="text-[11px] font-mono-ui tracking-[0.32em] uppercase text-[#00E5FF] mb-4">

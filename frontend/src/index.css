@@ -175,6 +175,20 @@ body {
   animation: riseIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* Hide scrollbars on horizontal tab containers */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Smooth tap on mobile */
+@media (max-width: 767px) {
+  button,
+  a,
+  input,
+  textarea {
+    -webkit-tap-highlight-color: rgba(0, 229, 255, 0.18);
+  }
+}
+
 /* ===== Scroll Car ===== */
 .scroll-car-track {
   position: fixed;

@@ -22,12 +22,12 @@ export default function Hero() {
     <section
       id="hero"
       data-testid="hero-section"
-      className="relative pt-36 sm:pt-40 lg:pt-44 pb-20 overflow-hidden"
+      className="relative pt-28 sm:pt-40 lg:pt-44 pb-16 sm:pb-20 overflow-hidden"
     >
       {/* Background grid floor */}
       <div className="absolute inset-0 grid-floor pointer-events-none" />
 
-      <div className="relative mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-8 lg:px-12">
         {/* Tag line */}
         <div className="flex items-center gap-3 rise-in" style={{ animationDelay: "60ms" }}>
           <span className="inline-flex items-center gap-2 glass rounded-full pl-2 pr-4 py-1.5">
@@ -47,7 +47,7 @@ export default function Hero() {
         {/* Headline */}
         <h1
           data-testid="hero-headline"
-          className="mt-7 font-display text-5xl sm:text-6xl lg:text-7xl xl:text-[88px] font-black tracking-tighter leading-[0.95] text-white max-w-5xl rise-in"
+          className="mt-6 sm:mt-7 font-display text-[40px] leading-[1.02] sm:text-6xl lg:text-7xl xl:text-[88px] sm:leading-[0.95] font-black tracking-tighter text-white max-w-5xl rise-in"
           style={{ animationDelay: "160ms" }}
         >
           Real-Time{" "}
@@ -59,42 +59,42 @@ export default function Hero() {
         </h1>
 
         {/* Subhead */}
-        <div className="mt-7 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start rise-in" style={{ animationDelay: "260ms" }}>
-          <p className="lg:col-span-7 text-lg text-[#A0AAB5] leading-relaxed max-w-2xl">
+        <div className="mt-6 sm:mt-7 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start rise-in" style={{ animationDelay: "260ms" }}>
+          <p className="lg:col-span-7 text-base sm:text-lg text-[#A0AAB5] leading-relaxed max-w-2xl">
             A continuously-running reinforcement learning agent piloting a
             virtual vehicle through procedurally-generated cityscapes. Streamed
             in real time from a GPU node — every frame is a decision, every
             decision is a gradient.
           </p>
 
-          <div className="lg:col-span-5 lg:justify-self-end flex items-center gap-4 lg:gap-6 font-mono-ui">
-            <div data-testid="stat-fps" className="text-right">
-              <div className="text-[10px] tracking-[0.3em] uppercase text-[#6b7280]">
+          <div className="lg:col-span-5 lg:justify-self-end grid grid-cols-3 gap-3 sm:flex sm:items-center sm:gap-5 lg:gap-6 font-mono-ui w-full">
+            <div data-testid="stat-fps" className="sm:text-right">
+              <div className="text-[9px] sm:text-[10px] tracking-[0.3em] uppercase text-[#6b7280]">
                 Sim FPS
               </div>
-              <div className="text-2xl text-white">60.0</div>
+              <div className="text-xl sm:text-2xl text-white">60.0</div>
             </div>
-            <div className="h-10 w-px bg-white/10" />
-            <div data-testid="stat-timesteps" className="text-right">
-              <div className="text-[10px] tracking-[0.3em] uppercase text-[#6b7280]">
+            <div className="hidden sm:block h-10 w-px bg-white/10" />
+            <div data-testid="stat-timesteps" className="sm:text-right">
+              <div className="text-[9px] sm:text-[10px] tracking-[0.3em] uppercase text-[#6b7280]">
                 Timesteps
               </div>
-              <div className="text-2xl text-white">
+              <div className="text-xl sm:text-2xl text-white">
                 4.21<span className="text-[#00E5FF]">M</span>
               </div>
             </div>
-            <div className="h-10 w-px bg-white/10" />
-            <div data-testid="stat-reward" className="text-right">
-              <div className="text-[10px] tracking-[0.3em] uppercase text-[#6b7280]">
+            <div className="hidden sm:block h-10 w-px bg-white/10" />
+            <div data-testid="stat-reward" className="sm:text-right">
+              <div className="text-[9px] sm:text-[10px] tracking-[0.3em] uppercase text-[#6b7280]">
                 Avg Reward
               </div>
-              <div className="text-2xl text-white">+1284</div>
+              <div className="text-xl sm:text-2xl text-white">+1284</div>
             </div>
           </div>
         </div>
 
         {/* CTA row */}
-        <div className="mt-9 flex flex-wrap items-center gap-4 rise-in" style={{ animationDelay: "360ms" }}>
+        <div className="mt-7 sm:mt-9 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4 rise-in" style={{ animationDelay: "360ms" }}>
           <a
             href="#simulation"
             data-testid="hero-cta-launch"
@@ -115,7 +115,7 @@ export default function Hero() {
       {/* Iframe wrapper */}
       <div
         id="simulation"
-        className="relative mx-auto max-w-7xl px-6 sm:px-8 lg:px-12 mt-16 rise-in"
+        className="relative mx-auto max-w-7xl px-4 sm:px-8 lg:px-12 mt-12 sm:mt-16 rise-in"
         style={{ animationDelay: "500ms" }}
       >
         <div className="flex items-center justify-between mb-3 font-mono-ui">

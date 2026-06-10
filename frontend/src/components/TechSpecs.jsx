@@ -30,8 +30,8 @@ const SPECS = [
 
 export default function TechSpecs() {
   return (
-    <section id="tech" data-testid="tech-section" className="relative py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+    <section id="tech" data-testid="tech-section" className="relative py-20 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-12">
         {/* Section header */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end mb-14">
           <div className="lg:col-span-7">

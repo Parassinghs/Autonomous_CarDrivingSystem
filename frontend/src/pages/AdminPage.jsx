@@ -260,10 +260,10 @@ export default function AdminPage() {
     <div className="min-h-screen pt-10 pb-24 relative">
       <div className="absolute inset-0 grid-floor pointer-events-none opacity-60" />
 
-      <div className="relative mx-auto max-w-5xl px-6 sm:px-8 lg:px-12">
+      <div className="relative mx-auto max-w-5xl px-4 sm:px-8 lg:px-12">
         {/* Header */}
-        <div className="flex items-start justify-between gap-4 mb-10">
-          <div>
+        <div className="flex items-start justify-between gap-3 mb-8 sm:mb-10">
+          <div className="min-w-0">
             <button
               onClick={() => nav("/")}
               data-testid="admin-back-home"
@@ -271,8 +271,8 @@ export default function AdminPage() {
             >
               <ArrowLeft className="w-3 h-3" /> Back to site
             </button>
-            <div className="flex items-center gap-3">
-              <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tighter text-white">
+            <div className="flex items-center gap-3 flex-wrap">
+              <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tighter text-white">
                 Admin <span className="neon-text">Dashboard</span>
               </h1>
               <span
@@ -301,7 +301,7 @@ export default function AdminPage() {
         </div>
 
         {/* Tabs */}
-        <div data-testid="admin-tabs" className="flex items-center gap-2 mb-8 border-b border-white/10">
+        <div data-testid="admin-tabs" className="flex items-center gap-1 sm:gap-2 mb-8 border-b border-white/10 overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 no-scrollbar">
           <TabButton
             active={tab === "stream"}
             onClick={() => {
