@@ -1,0 +1,112 @@
+{
+  "theme": "dark",
+  "archetype": "7 (Electric & Neon)",
+  "aesthetic": "Highly futuristic, cinematic, glassmorphism, deep blacks, neon blue accents",
+  "colors": {
+    "background": {
+      "base": "#050505",
+      "surface": "#0a0b10",
+      "glass": "rgba(255, 255, 255, 0.02)",
+      "glass_strong": "rgba(255, 255, 255, 0.05)"
+    },
+    "primary": {
+      "DEFAULT": "#00E5FF",
+      "glow": "rgba(0, 229, 255, 0.4)",
+      "hover": "#33EEFF",
+      "muted": "rgba(0, 229, 255, 0.1)"
+    },
+    "secondary": {
+      "DEFAULT": "#0055FF",
+      "glow": "rgba(0, 85, 255, 0.4)"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#A0AAB5",
+      "muted": "#6b7280"
+    },
+    "border": {
+      "DEFAULT": "rgba(255, 255, 255, 0.1)",
+      "highlight": "rgba(0, 229, 255, 0.3)"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "heading": "'Unbounded', sans-serif",
+      "body": "'Outfit', sans-serif",
+      "mono": "'JetBrains Mono', monospace"
+    },
+    "hierarchy": {
+      "h1": "text-5xl sm:text-6xl lg:text-7xl font-black tracking-tighter text-white",
+      "h2": "text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white",
+      "h3": "text-xl sm:text-2xl font-semibold tracking-tight text-white",
+      "body": "text-base sm:text-lg text-[#A0AAB5] leading-relaxed",
+      "label": "text-xs font-bold tracking-[0.2em] uppercase text-[#00E5FF]"
+    }
+  },
+  "layout": {
+    "spacing_scale": "Generous spacing. Use py-24 to py-32 for sections, gap-8 to gap-12 for grids.",
+    "container": "max-w-7xl mx-auto px-6 sm:px-8 lg:px-12",
+    "grids": {
+      "tech_specs": "grid grid-cols-1 md:grid-cols-3 gap-8",
+      "video_archive": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+    }
+  },
+  "components": {
+    "hero": {
+      "style": "Cinematic, full-width, immersive",
+      "instructions": "Place the H1 'Real-Time Autonomous AI Simulation' at the top center. Below the text, implement the ultra-wide iframe. Give the iframe wrapper an aspect-video ratio, max-w-7xl w-full, rounded-2xl overflow-hidden, and a border of border-[#00E5FF]/30 with a heavy box-shadow shadow-[0_0_40px_rgba(0,229,255,0.15)].",
+      "iframe_url": "https://connector.eagle3dstreaming.com/v5/parasTheGreat/AutonomousCar/default"
+    },
+    "tech_specs_card": {
+      "style": "Glassmorphism",
+      "classes": "bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:border-[#00E5FF]/50 hover:bg-white/[0.04] transition-all duration-300 relative group overflow-hidden",
+      "hover_effect": "Subtle translate-y-[-4px], border color shifts to neon blue."
+    },
+    "video_card": {
+      "style": "Cinematic Thumbnail",
+      "classes": "bg-[#0a0b10] border border-white/10 rounded-xl overflow-hidden group cursor-pointer hover:border-[#00E5FF]/40 transition-all duration-300 hover:shadow-[0_8px_32px_rgba(0,229,255,0.1)]",
+      "image_container": "relative aspect-video overflow-hidden bg-black",
+      "image_effect": "group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100",
+      "play_button": "absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm"
+    },
+    "button": {
+      "primary": "bg-[#00E5FF] text-black font-bold px-8 py-4 rounded-lg hover:bg-white hover:text-black transition-colors duration-300 shadow-[0_0_20px_rgba(0,229,255,0.3)]",
+      "secondary": "bg-transparent border border-white/20 text-white px-8 py-4 rounded-lg hover:border-white transition-colors duration-300"
+    },
+    "form_input": {
+      "classes": "bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#00E5FF] focus:ring-1 focus:ring-[#00E5FF] transition-all"
+    }
+  },
+  "visual_effects": {
+    "glassmorphism": "Always combine bg-white/[0.02] with backdrop-blur-xl and a 1px border-white/10. Do not use pure transparent backgrounds for cards or nav.",
+    "background_glow": "Add a fixed background element or radial gradient to the body: radial-gradient(circle at 50% 0%, rgba(0,85,255,0.1) 0%, #050505 60%). This prevents the black from feeling flat.",
+    "neon_accents": "Use #00E5FF for text highlights, active borders, and subtle glowing shadows."
+  },
+  "media": {
+    "images": [
+      {
+        "url": "https://images.pexels.com/photos/6424583/pexels-photo-6424583.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "video_thumbnail",
+        "description": "Code screen for training log video thumbnail"
+      },
+      {
+        "url": "https://images.pexels.com/photos/256502/pexels-photo-256502.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "video_thumbnail",
+        "description": "CSS code screen for training log video thumbnail"
+      }
+    ]
+  },
+  "testing": {
+    "attributes": "All interactive elements, forms, and cards MUST include a 'data-testid' attribute (e.g., 'hero-iframe', 'tech-spec-card', 'video-item', 'contact-submit-button', 'cms-add-button')."
+  },
+  "instructions_to_main_agent": [
+    "1. DEPENDENCIES: Install Google Fonts 'Unbounded' and 'Outfit' in index.html or global css. Install 'lucide-react' for tech and contact icons.",
+    "2. THEME ENFORCEMENT: Stick strictly to the dark/neon archetype. No white backgrounds, no soft pastel shadows. Ensure high contrast.",
+    "3. HERO SECTION: Embed the provided Eagle3D URL in an iframe. Make it massive and cinematic (w-full, aspect-video). Add a glowing neon border to its container.",
+    "4. TECH SPECS: Create a 3-column bento/grid layout. Use glassmorphism classes provided. Topics: 'Reinforcement Learning', 'Real-Time Raytracing', 'Spline Pathfinding'.",
+    "5. CMS FUNCTIONALITY (Admin + Video Grid): Create a simple FastAPI backend with SQLite (or memory) to store 'Training Logs'. The schema should include id, title, description, and thumbnail_url. Create a frontend Admin route/modal to add new entries, and a public 'Training Logs & Results' grid that fetches and displays them using the 'video_card' classes.",
+    "6. SEED DATA: Seed the database with at least 2 entries using the image URLs provided in the media section.",
+    "7. FOOTER: Build a minimalist glassmorphic contact form and include the user's specific links: LinkedIn (https://www.linkedin.com/in/paras-singh-9b422129b/) and Email (parassinghme@gmail.com).",
+    "8. ACCESSIBILITY & TESTING: Ensure all interactive elements have hover/focus states and include `data-testid` attributes."
+  ]
+}
