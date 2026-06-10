@@ -2,6 +2,7 @@ import React from "react";
 import { ArrowDown, Radio } from "lucide-react";
 
 const IFRAME_URL =
+  process.env.REACT_APP_IFRAME_URL ||
   "https://connector.eagle3dstreaming.com/v5/parasTheGreat/AutonomousCar/default";
 
 export default function Hero() {

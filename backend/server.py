@@ -81,7 +81,19 @@ async def root():
 
 @api_router.get("/training-logs", response_model=List[TrainingLog])
 async def list_training_logs():
-    docs = await db.training_logs.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    projection = {
+        "_id": 0,
+        "id": 1,
+        "title": 1,
+        "description": 1,
+        "thumbnail_url": 1,
+        "video_url": 1,
+        "episode": 1,
+        "duration": 1,
+        "metric": 1,
+        "created_at": 1,
+    }
+    docs = await db.training_logs.find({}, projection).sort("created_at", -1).to_list(500)
     return docs
 
 
@@ -112,7 +124,16 @@ async def submit_contact(payload: ContactMessageCreate):
 @api_router.get("/contact", response_model=List[ContactMessage])
 async def list_contact_messages(x_admin_passcode: Optional[str] = Header(None)):
     check_admin(x_admin_passcode)
-    docs = await db.contact_messages.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    projection = {
+        "_id": 0,
+        "id": 1,
+        "name": 1,
+        "email": 1,
+        "subject": 1,
+        "message": 1,
+        "created_at": 1,
+    }
+    docs = await db.contact_messages.find({}, projection).sort("created_at", -1).to_list(500)
     return docs
 
 
