@@ -175,18 +175,7 @@ body {
   animation: riseIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* ===== Custom Neon Cursor ===== */
-html.cursor-active,
-html.cursor-active body,
-html.cursor-active a,
-html.cursor-active button,
-html.cursor-active input,
-html.cursor-active textarea,
-html.cursor-active [role="button"],
-html.cursor-active label {
-  cursor: none;
-}
-
+/* ===== Custom Neon Cursor (augments native cursor, does not hide it) ===== */
 .cursor-dot,
 .cursor-halo {
   position: fixed;
