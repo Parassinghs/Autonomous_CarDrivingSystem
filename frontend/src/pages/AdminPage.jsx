@@ -6,6 +6,8 @@ import {
   deleteTrainingLog,
   verifyAdmin,
   fetchContactMessages,
+  fetchSimulation,
+  updateSimulation,
 } from "../lib/api";
 import {
   ArrowLeft,
@@ -19,6 +21,10 @@ import {
   Inbox,
   FileVideo,
   Mail,
+  Radio,
+  Link2,
+  PowerOff,
+  Check,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -39,10 +45,14 @@ export default function AdminPage() {
   const [checking, setChecking] = useState(true);
   const [logs, setLogs] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [tab, setTab] = useState("records");
+  const [tab, setTab] = useState("stream");
   const [form, setForm] = useState(initialForm);
   const [saving, setSaving] = useState(false);
   const [query, setQuery] = useState("");
+  const [streamUrl, setStreamUrl] = useState("");
+  const [streamInput, setStreamInput] = useState("");
+  const [streamUpdatedAt, setStreamUpdatedAt] = useState(null);
+  const [streamSaving, setStreamSaving] = useState(false);
 
   useEffect(() => {
     if (passcode) tryLogin(passcode, true);
@@ -80,6 +90,52 @@ export default function AdminPage() {
       setMessages(data || []);
     } catch {
       // silent — non-critical
+    }
+  };
+
+  const loadStream = async () => {
+    try {
+      const data = await fetchSimulation();
+      setStreamUrl(data?.stream_url || "");
+      setStreamInput(data?.stream_url || "");
+      setStreamUpdatedAt(data?.updated_at || null);
+    } catch {
+      // silent
+    }
+  };
+
+  const saveStream = async (e) => {
+    e?.preventDefault?.();
+    const url = streamInput.trim();
+    if (url && !/^https?:\/\//i.test(url)) {
+      toast.error("URL must start with http:// or https://");
+      return;
+    }
+    setStreamSaving(true);
+    try {
+      const data = await updateSimulation(url, passcode);
+      setStreamUrl(data?.stream_url || "");
+      setStreamUpdatedAt(data?.updated_at || null);
+      toast.success(url ? "Stream connected." : "Stream disconnected.");
+    } catch (err) {
+      toast.error(err?.response?.data?.detail || "Failed to update stream");
+    } finally {
+      setStreamSaving(false);
+    }
+  };
+
+  const disconnectStream = async () => {
+    setStreamInput("");
+    try {
+      setStreamSaving(true);
+      const data = await updateSimulation("", passcode);
+      setStreamUrl("");
+      setStreamUpdatedAt(data?.updated_at || null);
+      toast.success("Stream disconnected.");
+    } catch (err) {
+      toast.error(err?.response?.data?.detail || "Failed to disconnect");
+    } finally {
+      setStreamSaving(false);
     }
   };
 
@@ -247,6 +303,18 @@ export default function AdminPage() {
         {/* Tabs */}
         <div data-testid="admin-tabs" className="flex items-center gap-2 mb-8 border-b border-white/10">
           <TabButton
+            active={tab === "stream"}
+            onClick={() => {
+              setTab("stream");
+              loadStream();
+            }}
+            testid="admin-tab-stream"
+            icon={<Radio className="w-3.5 h-3.5" />}
+            label="Stream"
+            count={streamUrl ? "ON" : "OFF"}
+            on={!!streamUrl}
+          />
+          <TabButton
             active={tab === "records"}
             onClick={() => setTab("records")}
             testid="admin-tab-records"
@@ -266,6 +334,114 @@ export default function AdminPage() {
             count={messages.length}
           />
         </div>
+
+        {tab === "stream" && (
+          <div data-testid="admin-stream-panel" className="glass-strong rounded-2xl p-6 sm:p-8 mb-10">
+            <div className="flex items-center justify-between gap-4 mb-6">
+              <h2 className="font-display text-lg text-white flex items-center gap-2">
+                <Radio className="w-4 h-4 text-[#00E5FF]" /> Simulation stream
+              </h2>
+              <span
+                data-testid="admin-stream-status"
+                className={`inline-flex items-center gap-1.5 font-mono-ui text-[10px] tracking-[0.24em] uppercase px-2.5 py-1 rounded border ${
+                  streamUrl
+                    ? "text-[#00E5FF] border-[#00E5FF]/40 bg-[#00E5FF]/10"
+                    : "text-[#A0AAB5] border-white/10"
+                }`}
+              >
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    streamUrl ? "bg-[#00E5FF] animate-pulse" : "bg-[#6b7280]"
+                  }`}
+                />
+                {streamUrl ? "Live" : "Offline"}
+              </span>
+            </div>
+
+            <p className="text-[#A0AAB5] text-sm leading-relaxed mb-5 max-w-2xl">
+              Paste your simulation streaming link below. The hero section will
+              embed this URL as an iframe. Use any provider that supports iframe
+              embeds (Eagle3D, Pixel Streaming, YouTube live, Twitch player,
+              etc.). Leave empty to take the hero offline.
+            </p>
+
+            <form onSubmit={saveStream} className="space-y-5">
+              <Field label="Streaming link">
+                <div className="relative">
+                  <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" />
+                  <input
+                    data-testid="admin-stream-input"
+                    type="url"
+                    value={streamInput}
+                    onChange={(e) => setStreamInput(e.target.value)}
+                    placeholder="https://connector.eagle3dstreaming.com/v5/.../default"
+                    className={`${inputCls} pl-10`}
+                  />
+                </div>
+              </Field>
+
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div className="font-mono-ui text-[10px] tracking-[0.24em] uppercase text-[#6b7280]">
+                  {streamUpdatedAt
+                    ? `Last updated · ${formatDate(streamUpdatedAt)}`
+                    : "No previous stream set"}
+                </div>
+                <div className="flex items-center gap-3">
+                  {streamUrl && (
+                    <button
+                      type="button"
+                      data-testid="admin-stream-disconnect"
+                      onClick={disconnectStream}
+                      disabled={streamSaving}
+                      className="inline-flex items-center gap-2 border border-white/15 text-[#A0AAB5] hover:text-red-400 hover:border-red-400/40 font-mono-ui tracking-[0.18em] uppercase text-[11px] px-4 py-3 rounded-md transition-colors disabled:opacity-50"
+                    >
+                      <PowerOff className="w-3.5 h-3.5" /> Disconnect
+                    </button>
+                  )}
+                  <button
+                    data-testid="admin-stream-save"
+                    type="submit"
+                    disabled={streamSaving || streamInput.trim() === streamUrl}
+                    className="inline-flex items-center gap-2 bg-[#00E5FF] text-black font-semibold tracking-[0.14em] uppercase text-[12px] px-6 py-3 rounded-md hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_24px_rgba(0,229,255,0.25)]"
+                  >
+                    <Check className="w-4 h-4" />
+                    {streamSaving ? "Saving..." : "Start Simulation"}
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            {/* Live preview */}
+            <div className="mt-8">
+              <div className="font-mono-ui text-[10px] tracking-[0.28em] uppercase text-[#6b7280] mb-3">
+                Live preview
+              </div>
+              <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/10 bg-black">
+                {streamUrl ? (
+                  <iframe
+                    data-testid="admin-stream-preview"
+                    src={streamUrl}
+                    title="Stream preview"
+                    className="w-full h-full block bg-black"
+                    allow="autoplay; fullscreen; gamepad; accelerometer; gyroscope"
+                    allowFullScreen
+                  />
+                ) : (
+                  <div className="absolute inset-0 grid place-items-center text-center px-6">
+                    <div>
+                      <div className="font-mono-ui text-[11px] tracking-[0.28em] uppercase text-[#6b7280]">
+                        // no signal
+                      </div>
+                      <p className="mt-3 text-[#A0AAB5] text-sm max-w-sm">
+                        Paste a link above and click <span className="text-[#00E5FF]">Start Simulation</span> to broadcast.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {tab === "records" && (
           <>
@@ -527,7 +703,7 @@ export default function AdminPage() {
   );
 }
 
-const TabButton = ({ active, onClick, testid, icon, label, count }) => (
+const TabButton = ({ active, onClick, testid, icon, label, count, on }) => (
   <button
     type="button"
     data-testid={testid}
@@ -542,7 +718,11 @@ const TabButton = ({ active, onClick, testid, icon, label, count }) => (
     {label}
     <span
       className={`ml-1 px-1.5 py-0.5 rounded text-[10px] ${
-        active ? "bg-[#00E5FF]/15 text-[#00E5FF]" : "bg-white/[0.04] text-[#6b7280]"
+        on
+          ? "bg-[#00E5FF]/15 text-[#00E5FF]"
+          : active
+          ? "bg-[#00E5FF]/15 text-[#00E5FF]"
+          : "bg-white/[0.04] text-[#6b7280]"
       }`}
     >
       {count}

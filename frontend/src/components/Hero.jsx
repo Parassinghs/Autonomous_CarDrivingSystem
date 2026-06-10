@@ -1,11 +1,23 @@
-import React from "react";
-import { ArrowDown, Radio } from "lucide-react";
-
-const IFRAME_URL =
-  process.env.REACT_APP_IFRAME_URL ||
-  "https://connector.eagle3dstreaming.com/v5/parasTheGreat/AutonomousCar/default";
+import React, { useEffect, useState } from "react";
+import { ArrowDown, Radio, Link2, AlertTriangle } from "lucide-react";
+import { fetchSimulation } from "../lib/api";
 
 export default function Hero() {
+  const [streamUrl, setStreamUrl] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    fetchSimulation()
+      .then((data) => {
+        if (mounted) setStreamUrl(data?.stream_url || null);
+      })
+      .catch(() => {})
+      .finally(() => mounted && setLoaded(true));
+    return () => {
+      mounted = false;
+    };
+  }, []);
   return (
     <section
       id="hero"
@@ -128,14 +140,18 @@ export default function Hero() {
           <Corner pos="bl" />
           <Corner pos="br" />
 
-          <iframe
-            data-testid="hero-iframe"
-            src={IFRAME_URL}
-            title="Autonomous AI Simulation"
-            className="w-full h-full block bg-black"
-            allow="autoplay; fullscreen; gamepad; xr-spatial-tracking; microphone *; camera *; accelerometer; gyroscope"
-            allowFullScreen
-          />
+          {streamUrl ? (
+            <iframe
+              data-testid="hero-iframe"
+              src={streamUrl}
+              title="Autonomous AI Simulation"
+              className="w-full h-full block bg-black"
+              allow="autoplay; fullscreen; gamepad; xr-spatial-tracking; microphone *; camera *; accelerometer; gyroscope"
+              allowFullScreen
+            />
+          ) : (
+            <StreamPlaceholder loaded={loaded} />
+          )}
         </div>
 
         <div className="mt-3 font-mono-ui text-[11px] tracking-[0.24em] uppercase text-[#6b7280]">
@@ -160,3 +176,34 @@ const Corner = ({ pos }) => {
     />
   );
 };
+
+const StreamPlaceholder = ({ loaded }) => (
+  <div
+    data-testid="hero-stream-placeholder"
+    className="absolute inset-0 grid place-items-center bg-black"
+  >
+    <div className="absolute inset-0 grid-floor opacity-50 pointer-events-none" />
+    <div className="relative text-center px-8 max-w-lg">
+      <div className="w-14 h-14 mx-auto rounded-xl grid place-items-center bg-[#00E5FF]/10 border border-[#00E5FF]/40 text-[#00E5FF] mb-5">
+        {loaded ? <Link2 className="w-6 h-6" /> : <AlertTriangle className="w-6 h-6" />}
+      </div>
+      <h3 className="font-display text-2xl text-white tracking-tight">
+        {loaded ? "No stream connected" : "Connecting…"}
+      </h3>
+      <p className="mt-3 text-[#A0AAB5] text-sm leading-relaxed">
+        {loaded
+          ? "Paste a simulation streaming link from the admin dashboard to start broadcasting here."
+          : "Checking simulation feed status…"}
+      </p>
+      {loaded && (
+        <a
+          href="/admin"
+          data-testid="hero-stream-admin-link"
+          className="mt-6 inline-flex items-center gap-2 bg-[#00E5FF] text-black font-semibold tracking-[0.14em] uppercase text-[11px] px-5 py-3 rounded-md hover:bg-white transition-colors"
+        >
+          <Link2 className="w-3.5 h-3.5" /> Connect a stream
+        </a>
+      )}
+    </div>
+  </div>
+);

@@ -67,6 +67,15 @@ class ContactMessageCreate(BaseModel):
     message: str
 
 
+class SimulationSetting(BaseModel):
+    stream_url: Optional[str] = None
+    updated_at: Optional[str] = None
+
+
+class SimulationSettingUpdate(BaseModel):
+    stream_url: Optional[str] = None
+
+
 # ----- Helpers -----
 def check_admin(passcode: Optional[str]):
     if passcode != ADMIN_PASSCODE:
@@ -141,6 +150,30 @@ async def list_contact_messages(x_admin_passcode: Optional[str] = Header(None)):
 async def verify_admin(x_admin_passcode: Optional[str] = Header(None)):
     check_admin(x_admin_passcode)
     return {"ok": True}
+
+
+@api_router.get("/simulation", response_model=SimulationSetting)
+async def get_simulation():
+    doc = await db.settings.find_one({"_id": "simulation"}, {"_id": 0})
+    if not doc:
+        return SimulationSetting()
+    return SimulationSetting(**doc)
+
+
+@api_router.put("/simulation", response_model=SimulationSetting)
+async def update_simulation(
+    payload: SimulationSettingUpdate,
+    x_admin_passcode: Optional[str] = Header(None),
+):
+    check_admin(x_admin_passcode)
+    url = (payload.stream_url or "").strip() or None
+    if url and not (url.startswith("http://") or url.startswith("https://")):
+        raise HTTPException(status_code=422, detail="URL must start with http:// or https://")
+    doc = {"stream_url": url, "updated_at": now_iso()}
+    await db.settings.update_one(
+        {"_id": "simulation"}, {"$set": doc}, upsert=True
+    )
+    return SimulationSetting(**doc)
 
 
 # ----- Seed -----

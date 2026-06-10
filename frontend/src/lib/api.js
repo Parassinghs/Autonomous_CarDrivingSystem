@@ -47,3 +47,17 @@ export const fetchContactMessages = async (passcode) => {
   });
   return data;
 };
+
+export const fetchSimulation = async () => {
+  const { data } = await api.get("/simulation");
+  return data;
+};
+
+export const updateSimulation = async (streamUrl, passcode) => {
+  const { data } = await api.put(
+    "/simulation",
+    { stream_url: streamUrl },
+    { headers: { "X-Admin-Passcode": passcode } }
+  );
+  return data;
+};
