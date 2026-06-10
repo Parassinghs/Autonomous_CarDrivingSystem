@@ -174,3 +174,124 @@ body {
 .rise-in {
   animation: riseIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+
+/* ===== Custom Neon Cursor ===== */
+html.cursor-active,
+html.cursor-active body,
+html.cursor-active a,
+html.cursor-active button,
+html.cursor-active input,
+html.cursor-active textarea,
+html.cursor-active [role="button"],
+html.cursor-active label {
+  cursor: none;
+}
+
+.cursor-dot,
+.cursor-halo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform, width, height, background, box-shadow;
+}
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.85),
+    0 0 18px rgba(0, 229, 255, 0.85);
+  transition: width 180ms ease, height 180ms ease, background 180ms ease;
+  mix-blend-mode: screen;
+}
+.cursor-dot--hover {
+  width: 10px;
+  height: 10px;
+  background: #00e5ff;
+}
+
+.cursor-halo {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 229, 255, 0.55);
+  background: radial-gradient(
+    circle,
+    rgba(0, 229, 255, 0.18) 0%,
+    rgba(0, 229, 255, 0.04) 50%,
+    transparent 75%
+  );
+  box-shadow:
+    0 0 22px rgba(0, 229, 255, 0.25),
+    inset 0 0 14px rgba(0, 229, 255, 0.18);
+  transition:
+    width 260ms cubic-bezier(0.16, 1, 0.3, 1),
+    height 260ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 260ms ease,
+    box-shadow 260ms ease,
+    background 260ms ease;
+}
+.cursor-halo--hover {
+  width: 68px;
+  height: 68px;
+  border-color: rgba(0, 229, 255, 0.9);
+  box-shadow:
+    0 0 38px rgba(0, 229, 255, 0.55),
+    inset 0 0 22px rgba(0, 229, 255, 0.35);
+  background: radial-gradient(
+    circle,
+    rgba(0, 229, 255, 0.32) 0%,
+    rgba(0, 229, 255, 0.08) 55%,
+    transparent 78%
+  );
+}
+.cursor-halo--down {
+  transform-origin: center !important;
+  width: 28px;
+  height: 28px;
+}
+
+/* Ripple wave trail */
+.cursor-ripple-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  overflow: hidden;
+}
+.cursor-ripple {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  margin-left: -11px;
+  margin-top: -11px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 229, 255, 0.7);
+  box-shadow: 0 0 14px rgba(0, 229, 255, 0.4);
+  opacity: 0.9;
+  animation: cursorRipple 900ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  mix-blend-mode: screen;
+}
+.cursor-ripple--big {
+  animation-duration: 1100ms;
+  border-color: rgba(0, 229, 255, 0.9);
+}
+@keyframes cursorRipple {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.2);
+    border-width: 1.5px;
+  }
+  60% {
+    opacity: 0.45;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(4.2);
+    border-width: 0.5px;
+  }
+}

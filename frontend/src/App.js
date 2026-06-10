@@ -3,10 +3,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
 import Landing from "@/pages/Landing";
 import AdminPage from "@/pages/AdminPage";
+import CustomCursor from "@/components/CustomCursor";
 
 function App() {
   return (
     <div className="App">
+      <CustomCursor />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
