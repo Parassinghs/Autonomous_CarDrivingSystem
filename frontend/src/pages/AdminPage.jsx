@@ -359,10 +359,10 @@ export default function AdminPage() {
             </div>
 
             <p className="text-[#A0AAB5] text-sm leading-relaxed mb-5 max-w-2xl">
-              Paste your simulation streaming link below. The hero section will
-              embed this URL as an iframe. Use any provider that supports iframe
-              embeds (Eagle3D, Pixel Streaming, YouTube live, Twitch player,
-              etc.). Leave empty to take the hero offline.
+              Paste <span className="text-white">any</span> streaming link below — Eagle3D, Pixel Streaming,
+              ngrok tunnels, YouTube live, Twitch, your own server, anything that
+              loads in an iframe. We'll auto-fix missing <code className="font-mono-ui text-[#00E5FF]">https://</code> and
+              auto-bypass the ngrok browser-warning page. Leave empty to take the hero offline.
             </p>
 
             <form onSubmit={saveStream} className="space-y-5">
@@ -371,10 +371,10 @@ export default function AdminPage() {
                   <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" />
                   <input
                     data-testid="admin-stream-input"
-                    type="url"
+                    type="text"
                     value={streamInput}
                     onChange={(e) => setStreamInput(e.target.value)}
-                    placeholder="https://connector.eagle3dstreaming.com/v5/.../default"
+                    placeholder="https://abc-123.ngrok-free.app  ·  https://connector.eagle3dstreaming.com/...  ·  any iframe URL"
                     className={`${inputCls} pl-10`}
                   />
                 </div>

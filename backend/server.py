@@ -167,8 +167,17 @@ async def update_simulation(
 ):
     check_admin(x_admin_passcode)
     url = (payload.stream_url or "").strip() or None
-    if url and not (url.startswith("http://") or url.startswith("https://")):
-        raise HTTPException(status_code=422, detail="URL must start with http:// or https://")
+    if url:
+        # Auto-prepend https:// if scheme missing (so users can paste bare
+        # domains like "abc.ngrok-free.app" or "192.168.1.5:8080").
+        if not url.startswith(("http://", "https://")):
+            url = "https://" + url.lstrip("/")
+        # ngrok free tier shows an interstitial warning page when loaded in an
+        # iframe; bypass it by appending the documented query parameter.
+        if "ngrok-free.app" in url or "ngrok.io" in url or "ngrok.app" in url:
+            sep = "&" if "?" in url else "?"
+            if "ngrok-skip-browser-warning" not in url:
+                url = f"{url}{sep}ngrok-skip-browser-warning=true"
     doc = {"stream_url": url, "updated_at": now_iso()}
     await db.settings.update_one(
         {"_id": "simulation"}, {"$set": doc}, upsert=True
