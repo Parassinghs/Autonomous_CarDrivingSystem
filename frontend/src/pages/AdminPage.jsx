@@ -5,6 +5,7 @@ import {
   createTrainingLog,
   deleteTrainingLog,
   verifyAdmin,
+  fetchContactMessages,
 } from "../lib/api";
 import {
   ArrowLeft,
@@ -15,6 +16,9 @@ import {
   ExternalLink,
   Search,
   ShieldCheck,
+  Inbox,
+  FileVideo,
+  Mail,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -34,6 +38,8 @@ export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
   const [checking, setChecking] = useState(true);
   const [logs, setLogs] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [tab, setTab] = useState("records");
   const [form, setForm] = useState(initialForm);
   const [saving, setSaving] = useState(false);
   const [query, setQuery] = useState("");
@@ -50,6 +56,7 @@ export default function AdminPage() {
       setAuthed(true);
       localStorage.setItem("av_passcode", p);
       await loadLogs();
+      loadMessages(p);
     } catch {
       setAuthed(false);
       if (!silent && p !== "") toast.error("Invalid passcode");
@@ -64,6 +71,15 @@ export default function AdminPage() {
       setLogs(data || []);
     } catch {
       toast.error("Failed to load records");
+    }
+  };
+
+  const loadMessages = async (p) => {
+    try {
+      const data = await fetchContactMessages(p || passcode);
+      setMessages(data || []);
+    } catch {
+      // silent — non-critical
     }
   };
 
@@ -227,6 +243,32 @@ export default function AdminPage() {
             Sign out
           </button>
         </div>
+
+        {/* Tabs */}
+        <div data-testid="admin-tabs" className="flex items-center gap-2 mb-8 border-b border-white/10">
+          <TabButton
+            active={tab === "records"}
+            onClick={() => setTab("records")}
+            testid="admin-tab-records"
+            icon={<FileVideo className="w-3.5 h-3.5" />}
+            label="Records"
+            count={logs.length}
+          />
+          <TabButton
+            active={tab === "messages"}
+            onClick={() => {
+              setTab("messages");
+              loadMessages();
+            }}
+            testid="admin-tab-messages"
+            icon={<Inbox className="w-3.5 h-3.5" />}
+            label="Messages"
+            count={messages.length}
+          />
+        </div>
+
+        {tab === "records" && (
+          <>
 
         {/* Submission form */}
         <form
@@ -409,10 +451,119 @@ export default function AdminPage() {
             </Table>
           </div>
         </div>
+          </>
+        )}
+
+        {tab === "messages" && (
+          <div data-testid="admin-messages-panel" className="glass-strong rounded-2xl overflow-hidden">
+            <div className="flex items-center justify-between gap-4 p-5 sm:p-6 border-b border-white/10">
+              <div>
+                <h2 className="font-display text-lg text-white flex items-center gap-2">
+                  <Inbox className="w-4 h-4 text-[#00E5FF]" /> Customer messages
+                </h2>
+                <p className="font-mono-ui text-[10px] tracking-[0.24em] uppercase text-[#6b7280] mt-1">
+                  {messages.length} message{messages.length === 1 ? "" : "s"} received
+                </p>
+              </div>
+              <button
+                data-testid="admin-messages-refresh"
+                onClick={() => loadMessages()}
+                className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-[#A0AAB5] hover:text-[#00E5FF] border border-white/10 hover:border-[#00E5FF]/40 px-3 py-2 rounded-md transition-colors"
+              >
+                Refresh
+              </button>
+            </div>
+
+            {messages.length === 0 ? (
+              <div className="text-center text-[#6b7280] py-14 font-mono-ui text-xs tracking-[0.2em] uppercase">
+                Inbox is empty.
+              </div>
+            ) : (
+              <ul data-testid="admin-messages-list" className="divide-y divide-white/10">
+                {messages.map((m, i) => (
+                  <li
+                    key={m.id}
+                    data-testid={`admin-message-${m.id}`}
+                    className="p-5 sm:p-6 hover:bg-white/[0.02] transition-colors"
+                  >
+                    <div className="flex items-start justify-between gap-4 mb-2">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-mono-ui text-[10px] text-[#6b7280]">
+                            #{String(messages.length - i).padStart(3, "0")}
+                          </span>
+                          <span className="text-white font-medium truncate">
+                            {m.name}
+                          </span>
+                          <a
+                            href={`mailto:${m.email}`}
+                            data-testid={`admin-message-email-${m.id}`}
+                            className="inline-flex items-center gap-1 text-[#00E5FF] hover:text-white text-sm transition-colors"
+                          >
+                            <Mail className="w-3 h-3" /> {m.email}
+                          </a>
+                        </div>
+                        {m.subject && (
+                          <div className="font-mono-ui text-[11px] tracking-[0.2em] uppercase text-[#A0AAB5] mt-1.5">
+                            Re: {m.subject}
+                          </div>
+                        )}
+                      </div>
+                      <time className="font-mono-ui text-[10px] tracking-[0.2em] uppercase text-[#6b7280] flex-shrink-0">
+                        {formatDate(m.created_at)}
+                      </time>
+                    </div>
+                    <p className="text-[#A0AAB5] text-sm leading-relaxed whitespace-pre-wrap mt-3">
+                      {m.message}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
 }
+
+const TabButton = ({ active, onClick, testid, icon, label, count }) => (
+  <button
+    type="button"
+    data-testid={testid}
+    onClick={onClick}
+    className={`relative inline-flex items-center gap-2 px-4 py-3 -mb-px border-b-2 transition-colors font-mono-ui text-[11px] tracking-[0.22em] uppercase ${
+      active
+        ? "border-[#00E5FF] text-white"
+        : "border-transparent text-[#6b7280] hover:text-[#A0AAB5]"
+    }`}
+  >
+    {icon}
+    {label}
+    <span
+      className={`ml-1 px-1.5 py-0.5 rounded text-[10px] ${
+        active ? "bg-[#00E5FF]/15 text-[#00E5FF]" : "bg-white/[0.04] text-[#6b7280]"
+      }`}
+    >
+      {count}
+    </span>
+  </button>
+);
+
+const formatDate = (iso) => {
+  if (!iso) return "—";
+  try {
+    const d = new Date(iso);
+    return d.toLocaleString(undefined, {
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return iso;
+  }
+};
 
 const Field = ({ label, children }) => (
   <label className="block">

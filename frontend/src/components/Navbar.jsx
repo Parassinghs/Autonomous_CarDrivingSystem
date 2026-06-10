@@ -1,5 +1,5 @@
 import React from "react";
-import { Linkedin, Mail, Cpu } from "lucide-react";
+import { Linkedin, Mail, Cpu, Shield } from "lucide-react";
 
 export default function Navbar() {
   const linkClass =
@@ -38,6 +38,9 @@ export default function Navbar() {
             <a href="#contact" data-testid="nav-contact" className={linkClass}>
               Contact
             </a>
+            <a href="/admin" data-testid="nav-admin" className={linkClass}>
+              Admin
+            </a>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -58,6 +61,15 @@ export default function Navbar() {
               aria-label="Email"
             >
               <Mail className="w-4 h-4" />
+            </a>
+            <a
+              href="/admin"
+              data-testid="nav-admin-icon"
+              className="hidden sm:grid w-9 h-9 place-items-center rounded-md border border-white/10 hover:border-[#00E5FF]/60 text-[#A0AAB5] hover:text-[#00E5FF] transition-colors"
+              aria-label="Admin dashboard"
+              title="Admin dashboard"
+            >
+              <Shield className="w-4 h-4" />
             </a>
             <a
               href="#contact"

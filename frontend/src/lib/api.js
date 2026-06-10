@@ -40,3 +40,10 @@ export const verifyAdmin = async (passcode) => {
   );
   return data;
 };
+
+export const fetchContactMessages = async (passcode) => {
+  const { data } = await api.get("/contact", {
+    headers: { "X-Admin-Passcode": passcode },
+  });
+  return data;
+};
