@@ -3,12 +3,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
 import Landing from "@/pages/Landing";
 import AdminPage from "@/pages/AdminPage";
-import CustomCursor from "@/components/CustomCursor";
+import ScrollCar from "@/components/ScrollCar";
 
 function App() {
   return (
     <div className="App">
-      <CustomCursor />
+      <ScrollCar />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
